@@ -1,43 +1,43 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >0.6.0 <0.9.0;
 
-import "./EthSpiller.sol";
+import "./EthSpitter.sol";
 
-contract EthSpillerFactory {
-    mapping (address => address) ethSpillers;
+contract EthSpitterFactory {
+    mapping (address => address) ethSpitters;
 
-    error EthSpillerAlreadyExists (address ethSpillerAddress);
-    error EthSpillerDoesNotExist ();
+    error EthSpitterAlreadyExists (address ethSpitterAddress);
+    error EthSpitterDoesNotExist ();
 
     modifier restricted() {
-        if (ethSpillers[msg.sender] == address(0)) { revert EthSpillerDoesNotExist(); }
+        if (ethSpitters[msg.sender] == address(0)) { revert EthSpitterDoesNotExist(); }
         _;
    }
 
-    function createEthSpiller() external returns (address) {
-        if (ethSpillers[msg.sender] != address(0)) { revert EthSpillerAlreadyExists(ethSpillers[msg.sender]); }
+    function createEthSpitter() external returns (address) {
+        if (ethSpitters[msg.sender] != address(0)) { revert EthSpitterAlreadyExists(ethSpitters[msg.sender]); }
 
-        EthSpiller ethSpiller = new EthSpiller(msg.sender);
-        ethSpillers[msg.sender] = ethSpiller.contractAddress();
-        return ethSpillers[msg.sender];
+        EthSpitter ethSpitter = new EthSpitter(msg.sender);
+        ethSpitters[msg.sender] = ethSpitter.contractAddress();
+        return ethSpitters[msg.sender];
     }
 
     function addRecepient (address account) external restricted returns (uint) {
-        address contractAddress = ethSpillers[msg.sender];
-        EthSpiller ethSpiller = EthSpiller(contractAddress);
-        ethSpiller.addRecepient(msg.sender, account);
-        return ethSpiller.recepientsIndex(account);
+        address contractAddress = ethSpitters[msg.sender];
+        EthSpitter ethSpitter = EthSpitter(contractAddress);
+        ethSpitter.addRecepient(msg.sender, account);
+        return ethSpitter.recepientsIndex(account);
     }
 
     function removeRecepient (address account) external restricted {
-        address contractAddress = ethSpillers[msg.sender];
-        EthSpiller ethSpiller = EthSpiller(contractAddress);
-        ethSpiller.removeRecepient(msg.sender, account);
+        address contractAddress = ethSpitters[msg.sender];
+        EthSpitter ethSpitter = EthSpitter(contractAddress);
+        ethSpitter.removeRecepient(msg.sender, account);
     }
 
     function receiveEther () external payable restricted {
-        address contractAddress = ethSpillers[msg.sender];
-        EthSpiller ethSpiller = EthSpiller(contractAddress);
-        ethSpiller.receiveEther(msg.value);
+        address contractAddress = ethSpitters[msg.sender];
+        EthSpitter ethSpitter = EthSpitter(contractAddress);
+        ethSpitter.receiveEther(msg.value);
     }
 }
