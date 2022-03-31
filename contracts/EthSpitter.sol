@@ -50,9 +50,9 @@ contract EthSpitter {
 		recepients.pop();
 	}
 
-  	function receiveEther (uint amount) external payable {
+  	function receiveEther () external payable {
     	uint total = recepients.length;
-		uint val = amount / total;
+		uint val = msg.value / total;
 		for (uint i = 0; i < total; i++) {
 			recepients[i].call{value: val}("");
 		}

@@ -38,6 +38,6 @@ contract EthSpitterFactory {
     function receiveEther () external payable restricted {
         address contractAddress = ethSpitters[msg.sender];
         EthSpitter ethSpitter = EthSpitter(contractAddress);
-        ethSpitter.receiveEther(msg.value);
+        ethSpitter.receiveEther{value: msg.value}();
     }
 }
